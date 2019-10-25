@@ -105,7 +105,7 @@ class SignUpDone(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         meta = {
-            'title': 'Sign up',
+            'title': '仮登録完了 - Sign up',
         }
         context.update({
             'meta': meta,
@@ -124,7 +124,7 @@ class SignUpComplete(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         meta = {
-            'title': 'Sign up',
+            'title': '完了 - Sign up',
         }
         context.update({
             'meta': meta,
@@ -177,7 +177,7 @@ class UserUpdate(OnlyYouMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         meta = {
-            'title': 'User',
+            'title': 'ユーザー情報更新 - {}'.format(self.request.user.display_name),
         }
         context.update({
             'meta': meta,
@@ -192,6 +192,16 @@ class EmailChange(LoginRequiredMixin, FormView):
 
     template_name = 'code_essay/user.html'
     form_class = EmailChangeForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        meta = {
+            'title': 'メールアドレス変更 - {}'.format(self.request.user.display_name),
+        }
+        context.update({
+            'meta': meta,
+        })
+        return context
 
     def form_valid(self, form):
         user = self.request.user
@@ -218,6 +228,19 @@ class EmailChangeDone(LoginRequiredMixin, TemplateView):
 
     template_name = 'sign/message.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        meta = {
+            'title': 'メール送信完了',
+        }
+        context.update({
+            'meta': meta,
+            'message': 'メールアドレス変更用メールを送信しました。メールに記載のリンクをクリックして変更を完了してください。',
+            'submit_button_text': 'トップページへ',
+            'link_to': '/article/',
+        })
+        return context
+
 
 class EmailChangeComplete(LoginRequiredMixin, TemplateView):
 
@@ -238,16 +261,52 @@ class EmailChangeComplete(LoginRequiredMixin, TemplateView):
             request.user.save()
             return super().get(request, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        meta = {
+            'title': 'メールアドレス変更完了',
+        }
+        context.update({
+            'meta': meta,
+            'message': 'メールアドレスを変更しました。',
+            'submit_button_text': 'トップページへ',
+            'link_to': '/article/',
+        })
+        return context
+
 
 class PasswordChange(PasswordChangeView):
     form_class = MyPasswordChangeForm
     success_url = reverse_lazy('sign:password_change_done')
     template_name = 'code_essay/user.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        meta = {
+            'title': 'パスワード変更 - {}'.format(self.request.user.display_name),
+        }
+        context.update({
+            'meta': meta,
+        })
+        return context
+
 
 class PasswordChangeDone(PasswordChangeDoneView):
 
     template_name = 'sign/message.html'
+
+     def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        meta = {
+            'title': 'パスワード変更完了',
+        }
+        context.update({
+            'meta': meta,
+            'message': 'パスワードを更新しました。',
+            'submit_button_text': 'トップページへ',
+            'link_to': '/article/',
+        })
+        return context
 
 
 class PasswordReset(PasswordResetView):
@@ -258,10 +317,33 @@ class PasswordReset(PasswordResetView):
     form_class = MyPasswordResetForm
     success_url = reverse_lazy('sign:password_reset_done')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        meta = {
+            'title': 'パスワードのリセット',
+        }
+        context.update({
+            'meta': meta,
+        })
+        return context
+
 
 class PasswordResetDone(PasswordResetDoneView):
 
     template_name = 'sign/message.html'
+
+     def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        meta = {
+            'title': 'メール送信完了',
+        }
+        context.update({
+            'meta': meta,
+            'message': 'パスワードリセット用のメールを送信しました。メールに記載のリンクをクリックして変更を完了してください。',
+            'submit_button_text': 'トップページへ',
+            'link_to': '/article/',
+        })
+        return context
 
 
 class PasswordResetConfirm(PasswordResetConfirmView):
@@ -270,7 +352,30 @@ class PasswordResetConfirm(PasswordResetConfirmView):
     success_url = reverse_lazy('sign:password_reset_complete')
     template_name = 'code_essay/user.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        meta = {
+            'title': 'パスワードのリセット'.format(self.request.user.display_name),
+        }
+        context.update({
+            'meta': meta,
+        })
+        return context
+
 
 class PasswordResetComplete(PasswordResetCompleteView):
 
     template_name = 'sign/message.html'
+
+     def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        meta = {
+            'title': 'パスワードリセット完了',
+        }
+        context.update({
+            'meta': meta,
+            'message': 'パスワードを変更しました。',
+            'submit_button_text': 'トップページへ',
+            'link_to': '/article/',
+        })
+        return context
