@@ -1,0 +1,28 @@
+{% extends '../base/base.html' %}
+
+{% load static %}
+
+{% block contents %}
+
+<section class="user">
+  <form class="user__detail" method="post">
+    <h2 class="user__title"><i class="fas fa-user"></i> {{ user.display_name }}</h2>
+    <ul class="user__detail-list">
+      {% if form.non_field_errors %}
+      <li class="user__detail-item">
+        {{ form.non_field_errors }}
+      </li>
+      {% endif %}
+      {% for field in form %}
+      <li class="user__detail-item">
+        <label class="user__form-label" for="">{{ field.label }}</label>
+        {{ field }}
+      </li>
+      {% if field.errors %}<li class="user__detail-item">{{ field.errors }}</li>{% endif %}
+      {% endfor %}
+    </ul>
+    {% csrf_token %}
+    <button class="user__form-submit" type="submit">Change</button>
+</section>
+
+{% endblock %}

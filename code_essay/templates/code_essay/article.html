@@ -1,0 +1,17 @@
+{% extends '../base/base.html' %}
+
+{% load static %}
+
+{% block contents %}
+<article class="article">
+
+  {% include './frontparts/edit.html' %}
+
+  <div class="article__view" id="js-article__view"></div>
+
+  {% include './frontparts/comment.html' %}
+
+  {% include './frontparts/menu.html' %}
+
+</article>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends '../base/base.html' %}
+
+{% load static %}
+
+{% block contents %}
+
+<section class="sign">
+  <form class="sign__detail" method="post">
+    <h2 class="sign__title"><i class="fas fa-user"></i> {{ meta.title }}</h2>
+    <ul class="sign__detail-list">
+      {% if form.non_field_errors %}
+      <li class="sign__detail-item">
+      {{ form.non_field_errors }}
+      </li>
+      {% endif %}
+      {% for field in form %}
+      <li class="sign__detail-item">{{ field }}</li>
+      {% if field.errors %}<li class="sign__detail-item">{{ field.errors }}</li>{% endif %}
+      {% endfor %}
+    </ul>
+    <input type="hidden" name="next" value="{{ next }}">
+    {% csrf_token %}
+    <button class="sign__form-submit" type="submit">{{ submit_button_text }}</button>
+  </form>
+</section>
+
+{% endblock %}
