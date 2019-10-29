@@ -5,12 +5,12 @@
   <li class="article__menu-item-detail">
     <div class="article__menu-article-title-wrap-wrap">
       <div class="article__menu-article-title-wrap">
-        <span class="article__menu-article-title">The Airticle's Title is Here!</span> - <a href="">AuthorName</a>
+        <span class="article__menu-article-title">{{ article.title }}</span> - <a href="{% url 'code_essay:user' article.author.pk '' %}">{{ article.author.display_name }}</a>
       </div>
     </div>
     <div class="article__menu-article-score-wrap">
-      <span><i class="fas fa-eye"></i>454</span>
-      <a href=""><i class="fas fa-heart"></i>123</a>
+      <span><i class="fas fa-eye"></i>{{ article.views }}</span>
+      <a href=""><i class="fas fa-heart"></i>{{ article.likes }}</a>
     </div>
   </li>
   <li class="article__menu-item" id="js-article__menu--code"><i class="fas fa-code fa-fw"></i><span>Code</span>

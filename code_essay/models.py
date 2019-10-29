@@ -1,46 +1,45 @@
-# from django.db import models
-# from django.utils import timezone
-# import hashlib
-
-# class UserData(models.Model):
-#     slug = models.SlugField(max_length=255, unique=True,)
-#     name = models.CharField(max_length=255, unique=True,)
-#     password = models.CharField(max_length=255,)
-#     bio = models.TextField(blank=True,)
-#     favorite = models.ManyToManyField('Article', blank=True,)
-#     create_date = models.DateField(default=timezone.now,)
-#     icon = models.ImageField(blank=True, upload_to='icon')
-#     del_flg = models.BooleanField(default=False,)
+from django.db import models
+from django.utils import timezone
+from sign.models import User
+import uuid
 
 
-# class Article(models.Model):
-#     slug = models.SlugField(max_length=255, unique=True,)
-#     folder = models.ForeignKey('Folder', on_delete=models.CASCADE,)
-#     author = models.ForeignKey('User', on_delete=models.CASCADE,)
-#     private_flg = models.BooleanField(default=False,)
-#     title = models.CharField(max_length=255,)
-#     contents = models.TextField()
-#     create_date = models.DateField(default=timezone.now,)
-#     update_date = models.DateField(auto_now=True,)
-#     del_flg = models.BooleanField(default=False,)
-#     views = models.IntegerField(default=0,)
+class Article(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    slug = models.SlugField(max_length=255, unique=True, blank=True,)
+    is_official = models.BooleanField(default=False,)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE,)
+    author = models.ForeignKey(User, on_delete=models.CASCADE,)
+    title = models.CharField(max_length=255,)
+    contents = models.TextField()
+    is_open = models.BooleanField(default=True,)
+    create_date = models.DateField(default=timezone.now,)
+    update_date = models.DateField(auto_now=True,)
+    views = models.IntegerField(default=0,)
+    likes = models.IntegerField(default=0,)
+    del_flg = models.BooleanField(default=False,)
 
 
-# class Comment(models.Model):
-#     user = models.ForeignKey('User', on_delete=models.CASCADE)
-#     article = models.ForeignKey('Article', on_delete=models.CASCADE)
-#     contents = models.TextField()
-#     create_date = models.DateField(default=timezone.now,)
-#     del_flg = models.BooleanField(default=False,)
+class Category(models.Model):
+    slug = models.SlugField(max_length=255, unique=True, blank=True,)
+    name = models.CharField(max_length=255,)
+    create_date = models.DateField(default=timezone.now,)
+    update_date = models.DateField(auto_now=True,)
+    del_flg = models.BooleanField(default=False,)
 
 
-# class Category(models.Model):
-#     slug = models.SlugField(max_length=255, unique=True,)
-#     author = models.ForeignKey('User', on_delete=models.CASCADE)
-#     constant_flg = models.BooleanField(default=False,)
-#     private_flg = models.BooleanField(default=False,)
-#     title = models.CharField(max_length=255,)
-#     create_date = models.DateField(default=timezone.now,)
-#     del_flg = models.BooleanField(default=False,)
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    article = models.ForeignKey('Article', on_delete=models.CASCADE)
+    contents = models.TextField()
+    create_date = models.DateField(default=timezone.now,)
+    update_date = models.DateField(auto_now=True,)
+    goods = models.IntegerField(default=0,)
+    bads = models.IntegerField(default=0,)
+    del_flg = models.BooleanField(default=False,)
 
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,)
+    articles = models.ManyToManyField('Article', blank=True,)
 

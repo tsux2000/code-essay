@@ -3,11 +3,11 @@
 <footer class="footer">
 
   <ul class="footer__menu">
-    <li class="footer__menu-item"><a href="">Terms</a>
-    <li class="footer__menu-item"><a href="">Privacy</a>
-    <li class="footer__menu-item"><a href="">Contact</a>
-    <li class="footer__menu-item"><a href="">Blog</a>
-    <li class="footer__menu-item"><a href="">About</a>
+    <li class="footer__menu-item"><a href="{% url 'code_essay:article_slug' 'terms' %}">Terms</a>
+    <li class="footer__menu-item"><a href="{% url 'code_essay:article_slug' 'privacy' %}">Privacy</a>
+    <li class="footer__menu-item"><a href="{% url 'code_essay:article_slug' 'contact' %}">Contact</a>
+    <li class="footer__menu-item"><a href="{% url 'code_essay:official' '' %}">Blog</a>
+    <li class="footer__menu-item"><a href="{% url 'code_essay:article_slug' 'about' %}">About</a>
     <li class="footer__menu-item">© 2019 tsux
   </ul>
 

@@ -3,15 +3,15 @@
 <header class="header">
 
   <i class="fas fa-bars header__menu-icon header__item" id="js-header__menu-icon"></i>
-  <a class="header__title header__item" href="">Code Essay</a>
+  <a class="header__title header__item" href="{% url 'code_essay:index' %}">Code Essay</a>
 
   <div class="user-menu">
     {% if request.user.is_authenticated %}
-    <a class="user-menu__item" href="{% url 'code_essay:article' %}"><i class="fas fa-plus"></i> Create</a>
+    <a class="user-menu__item" href="{% url 'code_essay:new' %}"><i class="fas fa-plus"></i> Create</a>
     <i class="fas fa-user fa-border user-menu__item user-menu__user-icon" id="js-user__menu--others"></i>
     <ul class="user__others-menu" id="js-user__others-menu">
       <li class="user__others-menu-item-title"><span>Signed as {{ request.user.display_name }}.</span>
-      <li class="user__others-menu-item"><a href="{% url 'code_essay:user' request.user.pk %}">My Page</a>
+      <li class="user__others-menu-item"><a href="{% url 'code_essay:user' request.user.pk '' %}">My Page</a>
       <li class="user__others-menu-item"><a href="{% url 'sign:user_update' request.user.pk %}">Profile Settings</a>
       <li class="user__others-menu-item"><a href="{% url 'sign:password_change' %}">Password Change</a>
       <li class="user__others-menu-item"><a href="{% url 'sign:email_change' %}">Email Change</a>

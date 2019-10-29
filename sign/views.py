@@ -295,7 +295,7 @@ class PasswordChangeDone(PasswordChangeDoneView):
 
     template_name = 'sign/message.html'
 
-     def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         meta = {
             'title': 'パスワード変更完了',
@@ -332,7 +332,7 @@ class PasswordResetDone(PasswordResetDoneView):
 
     template_name = 'sign/message.html'
 
-     def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         meta = {
             'title': 'メール送信完了',
@@ -367,7 +367,7 @@ class PasswordResetComplete(PasswordResetCompleteView):
 
     template_name = 'sign/message.html'
 
-     def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         meta = {
             'title': 'パスワードリセット完了',

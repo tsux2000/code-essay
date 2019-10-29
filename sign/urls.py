@@ -10,9 +10,9 @@ urlpatterns = [
 
     path('sign_up/', SignUp.as_view(), name='sign_up'),
     path('sign_up/done', SignUpDone.as_view(), name='sign_up_done'),
-    path('sign_up/complete/<token>/', SignUpComplete.as_view(), name='sign_up_complete'),
+    path('sign_up/complete/<str:token>/', SignUpComplete.as_view(), name='sign_up_complete'),
 
-    path('user_update/<int:pk>/', UserUpdate.as_view(), name='user_update'),
+    path('user_update/<uuid:pk>/', UserUpdate.as_view(), name='user_update'),
 
     path('email_change/', EmailChange.as_view(), name='email_change'),
     path('email_change/done/', EmailChangeDone.as_view(), name='email_change_done'),
@@ -23,7 +23,7 @@ urlpatterns = [
 
     path('password_reset/', PasswordReset.as_view(), name='password_reset'),
     path('password_reset/done/', PasswordResetDone.as_view(), name='password_reset_done'),
-    path('password_reset/confirm/<uidb64>/<token>/', PasswordResetConfirm.as_view(), name='password_reset_confirm'),
+    path('password_reset/confirm/<uidb64>/<str:token>/', PasswordResetConfirm.as_view(), name='password_reset_confirm'),
     path('password_reset/complete/', PasswordResetComplete.as_view(), name='password_reset_complete'),
 
 ]

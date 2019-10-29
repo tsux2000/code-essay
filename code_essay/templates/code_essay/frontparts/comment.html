@@ -3,21 +3,19 @@
 <div class="article__comment" id="js-article__comment">
 
   <ul class="article__comment-list">
+    {% for comment in comment_list %}
     <li class="article__comment-item">
       <i class="fas fa-user fa-border article__comment-user-icon"></i>
-      <span>UserName</span>
+      <span>{{ comment.user }}</span>
       <i class="fas fa-times article__comment-delete-icon"></i>
-      <p class="article__comment-contents">
-        これはコメントです。ああああああああああああ。アイウエオかきくけこさしすせそたちつてと。
-        なにぬねの。はひふへほ。まみむめも。やイユイェよ。和音。。。
-      </p>
-      <p class="article__comment-date">2019-08-24-08:00</p>
+      <p class="article__comment-contents">{{ comment.contents }}</p>
+      <p class="article__comment-date">{{ comment.update_date }}</p>
     </li>
+    {% endfor %}
   </ul>
 
   <form action="" class="article__comment-submit-box">
-    <textarea name="article-comment" class="article__comment-write"
-      placeholder="Input message and press Submit."></textarea>
+    <textarea name="article-comment" class="article__comment-write" placeholder="Input message and press Submit."></textarea>
     <button class="article__comment-submit-button">Submit</button>
   </form>
 

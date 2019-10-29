@@ -1,0 +1,51 @@
+{% extends '../base/base.html' %}
+
+{% load static %}
+
+{% block contents %}
+
+<section class="list">
+
+  <div class="list__detail">
+    <h2 class="list__detail-title">{{ meta.title }}</h2>
+    <span class="list__detail-count">
+      {% if offset == max_disp_num %}1{% else %}{{ offset }}~{{ max_disp_num }}{% endif %}件表示 / {{ article_num }}件中
+    </span>
+    {% if not article_list %}
+    <span class="list__detail-not-found">Article Not Found</span>
+    {% endif %}
+  </div>
+
+  <div class="list__contents-wrap">
+    {% if article_list %}
+    <ul class="list__contents">
+      {% for article in article_list %}
+      <li class="list__contents-item">
+        <h3><a class="list__contents-title" href="{% url 'code_essay:article' article.pk %}">{{ article.title }}</a></h3>
+        <span class="list__contents-author">
+          <i class="fas fa-user"></i>
+          <a class="list__contents-author-name" href="{% url 'code_essay:user' article.author.pk '' %}">{{ article.author.display_name }}</a>
+        </span>
+        <span class="list__contents-create">create: {{ article.create_date }}</span>
+        <span class="list__contents-update">update: {{ article.update_date }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  <div>
+    <ul class="list__page-nav">
+      {% for i in page_nav %}
+      {% if i == page %}
+      <li><span class="list__page-nav-item">{{ i }}</span></li>
+      {% else %}
+      <li><a class="list__page-nav-item" href="{{ page_nav_url }}page/{{ i }}/">{{ i }}</a></li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+
+</section>
+
+{% endblock %}

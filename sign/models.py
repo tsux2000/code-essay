@@ -5,6 +5,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.contrib.auth.base_user import BaseUserManager
+import uuid
 
 
 class UserManager(BaseUserManager):
@@ -53,6 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     カスタマイズされたユーザーモデル.
     """
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(_('email address'), unique=True)
     name = models.CharField(_('name'), max_length=30, blank=True)
     display_name = models.CharField(_('display name'), max_length=30, blank=True)
