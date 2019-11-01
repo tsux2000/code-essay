@@ -2,7 +2,7 @@
 
 <nav class="search" id="js-search">
 
-  <form class="search__form" action="{% url 'code_essay:article_list' '' %}" post="get">
+  <form class="search__form" action="{% url 'code_essay:article_list' %}" post="get">
     <div>
       <input class="search__keyword-input" id="" name="keywords" type="text" placeholder="Search">
       <div>
@@ -30,22 +30,22 @@
 
   <ul class="search__category-list">
     <li class="search__category-item">
-      <a href="{% url 'code_essay:article_list' '' %}"><i class="fab fa-diaspora fa-fw"></i> All Articles</a>
+      <a href="{% url 'code_essay:article_list' %}"><i class="fab fa-diaspora fa-fw"></i> All Articles</a>
     </li>
     {% if request.user.is_authenticated %}
     <li class="search__category-item">
-      <a href="{% url 'code_essay:user' request.user.pk '' %}"><i class="fab fa-diaspora fa-fw"></i> Your Articles</a>
+      <a href="{% url 'code_essay:user' request.user.pk %}"><i class="fab fa-diaspora fa-fw"></i> Your Articles</a>
     </li>
     {% endif %}
     <li class="search__category-item">
-      <a href="{% url 'code_essay:official' '' %}"><i class="fab fa-diaspora fa-fw"></i> Official</a>
+      <a href="{% url 'code_essay:official' %}"><i class="fab fa-diaspora fa-fw"></i> Official</a>
     </li>
     <li>
       <div class="search__category-item"><i class="fas fa-chevron-right fa-fw"></i> Categories</div>
       <ul class="search__category-list">
         {% for category in category_list %}
         <li class="search__category-item">
-          <a href="{% url 'code_essay:category' category.slug '' %}"><i class="fab fa-diaspora fa-fw"></i> {{ category.name }}</a>
+          <a href="{% url 'code_essay:category' category.slug %}"><i class="fab fa-diaspora fa-fw"></i> {{ category.name }}</a>
         </li>
         {% endfor %}
       </ul>

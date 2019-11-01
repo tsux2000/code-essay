@@ -1,7 +1,12 @@
 {% load static %}
 
 <div class="article__edit" id="js-article__edit">
-  <!-- ログインユーザーがAuthorでないときはdisabled -->
-  <!-- リアルタイム編集・保存 -->
-  <textarea class="article__textarea" id="js-article__textarea" spellcheck="false"></textarea>
+  <textarea class="article__textarea" id="js-article__textarea" spellcheck="false"
+    {% if article and article.author != request.user %}disabled{% endif %}></textarea>
+  {% if not article %}
+  <form action="{% url 'code_essay:new' %}" method="post" style="display: none;">
+    {{ form }}
+    {% csrf_token %}
+  </form>
+  {% endif %}
 </div>

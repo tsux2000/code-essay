@@ -80,8 +80,5 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @property
     def username(self):
-        """
-        username属性のゲッター
-        他アプリケーションが、username属性にアクセスした場合に備えてメールアドレスを返すよう定義
-        """
+        """username属性のゲッター. username属性にアクセスした場合, メールアドレスを返す."""
         return self.email

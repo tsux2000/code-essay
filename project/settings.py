@@ -21,11 +21,12 @@ INSTALLED_APPS = [
     'sign.apps.SignConfig', # ユーザ管理用のアプリを追加
 ]
 
-# ミドルウェアの定義
+# ミドルウェアの定義 （並び順関係あり）
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware', # 多言語対応
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -83,6 +84,12 @@ TIME_ZONE = 'Asia/Tokyo'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+# 言語環境設定
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
 
 # 静的ファイルの設定
 

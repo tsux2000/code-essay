@@ -1,21 +1,29 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView
 from code_essay.forms import ArticleForm
 from code_essay.models import Article, Comment, Category
-from sign.models import User
-from django.urls import reverse_lazy
-import math
-import re
 from django.http import HttpResponseBadRequest
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, CreateView, ListView
+from math import ceil
+from re import sub
+from sign.models import User
 
-DISP_NUM = 10
 
-class IndexView(TemplateView):
+class IndexView(ListView):
+
     template_name = 'code_essay/index.html'
+    model = Category
+    paginate_by = 10
+    queryset = Article.objects.filter(del_flg=False,)
+    meta = {
+        'robots': 'index, follow',
+        'title': 'Topics',
+    }
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
+            'meta': self.meta,
             'category_list': Category.objects.filter(del_flg=False,),
         })
         return context
@@ -26,9 +34,14 @@ class CreateArticleView(CreateView):
     form_class = ArticleForm
     model = Article
 
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        messages.success(self.request, '新しいノートを作成しました')
+        self.success_url = reverse_lazy('code_essay:article', form.instance.pk)
+        return result
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        success_url = reverse_lazy('code_essay:article', article.pk)
         context.update({
             'category_list': Category.objects.filter(del_flg=False,),
         })
@@ -78,40 +91,33 @@ class ArticleView(TemplateView):
         pass
 
 
-class ArticleListView(TemplateView):
+class ArticleListView(ListView):
 
     template_name = 'code_essay/article_list.html'
+    model = Article
+    paginate_by = 10
+    queryset = Article.objects.filter(del_flg=False, is_official=False, is_open=True,)
     meta = {
         'robots': 'noindex, follow',
         'title': 'ノート一覧',
     }
-    user = {}
-    articles = Article.objects.filter(del_flg=False, is_official=False, is_open=True,)
-
-    def get(self, request, **kwargs):
-        self.meta['title'] = 'ノート一覧'
-        return super().get(request, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        order, page = kwargs.get('order_and_page')
-        offset = (int(page) - 1) * DISP_NUM
         context.update({
             'meta': self.meta,
             'category_list': Category.objects.filter(del_flg=False,),
-            'article_list': self.articles.order_by(order)[offset:offset+DISP_NUM],
-            'article_num': len(self.articles),
-            'page': int(page),
-            'page_nav': [i + 1 for i in range(math.ceil(len(self.articles) / DISP_NUM))],
-            'page_nav_url': re.sub('page/[0-9]+/', '', self.request.path),
-            'offset': offset + 1,
-            'max_disp_num': min(offset + DISP_NUM, len(self.articles)),
-            'display_user': self.user,
         })
         return context
 
 
-class UserArticleListView(ArticleListView):
+class UserArticleListView(ListView):
+
+    template_name = 'code_essay/article_list.html'
+    model = Article
+    paginate_by = 10
+    queryset = Article.objects.filter(del_flg=False, is_official=False, is_open=True,)
+    meta = {'robots': 'noindex, follow',}
 
     def get(self, request, **kwargs):
         user_id = kwargs.get('user_id')
@@ -119,17 +125,27 @@ class UserArticleListView(ArticleListView):
             self.user = User.objects.get(pk=user_id, is_active=True)
         except User.DoesNotExist:
             return HttpResponseBadRequest()
-        self.meta['title'] = '{} のノート一覧'.format(self.user.display_name)
-        self.articles = Article.objects.filter(
-            author=self.user,
-            del_flg=False,
-            is_official=False,
-            is_open=True,
-        )
         return super().get(request, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.meta['title'] = '{} のノート一覧'.format(self.user.display_name)
+        self.queryset = self.queryset.filter(author=self.user,)
+        context.update({
+            'meta': self.meta,
+            'category_list': Category.objects.filter(del_flg=False,),
+            'display_user': self.user,
+        })
+        return context
 
-class CategoryArticleListView(ArticleListView):
+
+class CategoryArticleListView(ListView):
+
+    template_name = 'code_essay/article_list.html'
+    model = Article
+    paginate_by = 10
+    queryset = Article.objects.filter(del_flg=False, is_official=False, is_open=True,)
+    meta = {'robots': 'noindex, follow',}
 
     def get(self, request, **kwargs):
         category_slug = kwargs.get('category_slug')
@@ -137,20 +153,34 @@ class CategoryArticleListView(ArticleListView):
             self.category = Category.objects.get(del_flg=False, slug=category_slug)
         except Category.DoesNotExist:
             return HttpResponseBadRequest()
+        return super().get(request, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         self.meta['title'] = '{} のノート一覧'.format(self.category.name)
-        self.articles = Article.objects.filter(
-            category=self.category,
-            del_flg=False,
-            is_official=False,
-            is_open=True,
-        )
-        return super().get(request, **kwargs)
+        self.queryset = self.queryset.filter(category=self.category,)
+        context.update({
+            'meta': self.meta,
+            'category_list': Category.objects.filter(del_flg=False,),
+        })
+        return context
 
 
-class OfficialArticleListView(ArticleListView):
+class OfficialArticleListView(ListView):
 
-    def get(self, request, **kwargs):
-        self.articles = Article.objects.filter(del_flg=False, is_official=True, is_open=True,)
-        self.meta['title'] = 'Code Essay 運営チーム'
-        return super().get(request, **kwargs)
+    template_name = 'code_essay/article_list.html'
+    model = Article
+    paginate_by = 10
+    queryset = Article.objects.filter(del_flg=False, is_official=True, is_open=True,)
+    meta = {
+        'robots': 'noindex, follow',
+        'title': 'Code Essay 運営チーム',
+    }
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'meta': self.meta,
+            'category_list': Category.objects.filter(del_flg=False,),
+        })
+        return context

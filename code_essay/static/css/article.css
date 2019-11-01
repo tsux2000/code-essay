@@ -93,6 +93,12 @@
   z-index: 20;
 }
 
+.article__menu-item-detail {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-around;
+}
+
 .article__menu-article-title-wrap {
   color: #666;
   border-bottom: 1px solid #888;
@@ -110,6 +116,15 @@
 .article__menu-article-title {
   color: #000;
   font-size: 16px;
+}
+
+input.article__menu-article-title {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  line-height: 24px;
+  margin: 0 0 5px;
+  padding: 4px;
 }
 
 .article__menu-article-score-wrap {
